@@ -114,7 +114,7 @@ combo = pd.concat(listo)
 combo['LAST_UPDATED_DATE'] = combo['REPORT_DATE']
 
 
-testo = combo.loc[combo['CODE'] == "NSW"]
+
 
 # testo = testo[['REPORT_DATE', 'CODE', 'CASE_CNT','PREV_CASE_CNT', 'NEW_CASE_CNT']]
 
@@ -125,6 +125,10 @@ testo = combo.loc[combo['CODE'] == "NSW"]
 
 ant = pd.read_csv('archive/Anthony_feed.csv')
 ant = ant[['REPORT_DATE', 'LAST_UPDATED_DATE', 'NAME', 'CODE', 'ACTIVE_CNT', 'CASE_CNT', 'DEATH_CNT', 'TEST_CNT', 'MED_HOSP_CNT', 'MED_ICU_CNT', 'PREV_ACTIVE_CNT', 'PREV_CASE_CNT', 'PREV_DEATH_CNT', 'PREV_TEST_CNT', 'PREV_MED_HOSP_CNT', 'PREV_MED_ICU_CNT', 'NEW_CASE_CNT', 'PREV_NEW_CASE_CNT']]
+
+ant['REPORT_DATE'] = pd.to_datetime(ant['REPORT_DATE'])
+ant['REPORT_DATE'] = ant['REPORT_DATE'] + pd.DateOffset(days=1)
+ant['REPORT_DATE'] = ant['REPORT_DATE'].dt.strftime("%Y-%m-%d")
 
 ant = ant.loc[ant['REPORT_DATE'] < "2021-10-06"]
 
@@ -143,6 +147,10 @@ tog = tog.sort_values(by='REPORT_DATE', ascending=True)
 with open('archive/cases_feed_archive.csv', 'w') as f:
     tog.to_csv(f, header=True, index=False)
 
+
+testo = tog.loc[(tog['REPORT_DATE'] > "2021-10-01") & (tog['REPORT_DATE'] < "2021-10-15")]
+
+testo = testo.loc[testo['CODE'] == "NSW"]
 
 p = testo
 
