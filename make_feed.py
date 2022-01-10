@@ -138,6 +138,10 @@ tog['LAST_UPDATED_DATE'] = tog['LAST_UPDATED_DATE'].dt.strftime("%Y-%m-%d")
 
 tog = tog.sort_values(by='REPORT_DATE', ascending=True)
 
+### Keep copy
+
+with open('archive/cases_feed_archive.csv', 'w') as f:
+    tog.to_csv(f, header=True, index=False)
 
 
 p = testo
