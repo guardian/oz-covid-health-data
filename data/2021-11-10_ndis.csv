@@ -1,5 +1,4 @@
-0,1,2,3,4,5,6,Date
-State,Participant Active,Worker Active,Participant Recovered,Worker Recovered,Participant Deaths,Worker Deaths,2021-11-10
+State,Participant Active,Worker Active,Participant Recovered,Worker Recovered,Participant Deaths,Worker Deaths,Date
 ACT,6,8,9,17,-,-,2021-11-10
 NSW,119,147,160,216,12,-,2021-11-10
 NT,-,-,-,-,-,-,2021-11-10
