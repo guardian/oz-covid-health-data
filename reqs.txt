@@ -1,0 +1,7 @@
+pandas
+datetime
+requests
+pytz
+selenium
+lxml
+
