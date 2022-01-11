@@ -1,6 +1,6 @@
 import pandas as pd 
 from modules.syncData import syncData
-
+pd.set_option("display.max_rows", 100)
 # test = pd.read_json('https://covidlive.com.au/covid-live.json')
 # print(test.columns.tolist())
 
@@ -59,21 +59,23 @@ hospo['In hospital'] = hospo['Not in ICU'] + hospo['ICU']
 
 hospo = hospo[['Date', 'Jurisdiction', 'In hospital', 'ICU']]
 
+hospo = hospo.loc[~((hospo['Jurisdiction'] == "NT") & (hospo['Date'] > "2021-12-19"))]
 
-# ### GET DATA TO ADJUST NT HOSPITAL SCRAPE
+### GET DATA TO ADJUST NT HOSPITAL SCRAPE
 
-# nt_hos = pd.read_csv('output/nt_hospitalisations')
-# # 'Date', 'In hospital'
-# nt_hos['Jurisdiction'] = "NT"
+nt_hos = pd.read_csv('output/nt_hospitalisations.csv')
+# 'Date', 'In hospital'
+# nt_hos.columsn = 
+nt_hos['Jurisdiction'] = "NT"
 
-# hospo.loc[(hospo['Jurisdiction'] == "NT") & (hospo['Date'] > "2021-12-19"), "In hospital"] = nt_hos['In hospital']
+hospo = hospo.append(nt_hos)
 
-# p = nt_hos
-# print(p)
-# # print(p.tail(20))
+p = hospo
+print(p)
+# print(p.tail(20))
 # print(p.columns.tolist())
 
-# print(hospo.loc[hospo['Jurisdiction'] == "NT"].tail(30))
+print(hospo.loc[hospo['Jurisdiction'] == "NT"].tail(35))
 
 ### Start Combining
 
@@ -180,4 +182,4 @@ tog.fillna('', inplace=True)
 
 # print(combo.to_dict('records'))
 
-# syncData(tog.to_dict(orient='records'),'2022/01/oz-covid-health-data', f"cases")
+syncData(tog.to_dict(orient='records'),'2022/01/oz-covid-health-data', f"cases")

@@ -41,9 +41,10 @@ for card in cards:
 data = [{'Date': datto, 'In hospital': num}]
 new = pd.DataFrame.from_records(data)
 
-## Read in on
+## Read in archive
+archive = 'archive/nt_scraping/nt_hospitalisations_archive.csv'
 
-old = pd.read_csv('output/nt_hospitalisations')
+old = pd.read_csv(archive)
 
 combo = old.append(new)
 
@@ -53,5 +54,30 @@ combo = combo.drop_duplicates(subset=['Date'],keep='last')
 
 combo = combo.sort_values(by='Date', ascending=True)
 
-with open('output/nt_hospitalisations', 'w') as f:
+with open(archive, 'w') as f:
     combo.to_csv(f, index=False, header=True)
+
+
+# combo['Date'] = pd.to_datetime(combo['Date'])
+# combo['Date'] = combo['Date'] + pd.DateOffset(days=1)
+# combo['Date'] = combo['Date'].dt.strftime("%Y-%m-%d")
+
+### Output official 
+
+hospo = pd.read_csv('output/hospitalisations.csv')
+
+nt = hospo.loc[hospo['Jurisdiction'] == "NT"]
+
+tog = pd.merge(combo, nt, on='Date', how='left')
+
+tog = tog[['Date', 'In hospital', 'ICU']]
+
+### Dump it
+
+with open('output/nt_hospitalisations.csv', 'w') as f:
+    tog.to_csv(f, index=False, header=True)
+
+p = tog
+
+print(p)
+print(p.columns)
