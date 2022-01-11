@@ -34,7 +34,8 @@ i = 0
 ## Need to wait while all the tables load
 while len(tables) < 9:
     # driver.implicitly_wait(10)
-    time.sleep(1)
+    print(f"Len {len(tables)}")
+    time.sleep(2)
     tables = pd.read_html(driver.page_source.encode("utf-8"))
     i += 1
 
@@ -48,7 +49,7 @@ names = {0:"recent_cases", 1:"total_cases", 2:"cases_age_sex",
 
 dicto = {"recent_cases": ['Jurisdiction', 'Active cases', 'Locally acquired last 24 hours',
                             'Overseas acquired last 24 hours',
-                            "'Under investigation last 24 hours'", 'Locally acquired last 7 days',
+                            "Under investigation last 24 hours", 'Locally acquired last 7 days',
                             'Overseas acquired last 7 days', 'Under investigation last 7 days','Date'],
        "total_cases":   ['Jurisdiction', 'Overseas',
                         'Locally acquired - contact of confirmed case',
@@ -82,6 +83,8 @@ if len(tables) >= 9:
 
             ## Dump individual file
 
+            print(f"Dumping individual: {title}")
+
             with open(f"data/{title}.csv", "w") as f:
                 table.to_csv(f, index=False, header=True)
 
@@ -92,13 +95,13 @@ if len(tables) >= 9:
             if (nammo == "recent_cases") | (nammo == "total_cases"):
                 # if (name == testo):
                     print(nammo, cols)
-                    cols = table.columns.tolist()
-                    cols = [x.replace("*", "").strip() if "*" in x else x for x in cols]
-                    cols = [x.replace("^", "").strip() if "^" in x else x for x in cols]
-                    cols = [x.replace("'", "").strip() if "'" in x else x for x in cols]
-                    cols = [x.replace("'", "").strip() if "'" in x else x for x in cols]
-                    table.cols = cols
-                    print(nammo, cols)
+                    inter_cols = table.columns.tolist()
+                    inter_cols = [x.replace("*", "").strip() if "*" in x else x for x in inter_cols]
+                    inter_cols = [x.replace("^", "").strip() if "^" in x else x for x in inter_cols]
+                    inter_cols = [x.replace("'", "").strip() if "'" in x else x for x in inter_cols]
+                    inter_cols = [x.replace("'", "").strip() if "'" in x else x for x in inter_cols]
+                    table.columns = inter_cols
+                    print(nammo, inter_cols)
                     # table.rename(columns={"'Under investigation last 24 hours'":'Under investigation last 24 hours'}, inplace=True)
 
             table[cols] = table[cols]
@@ -114,14 +117,17 @@ if len(tables) >= 9:
             # print("Dropped", combo.shape)
 
 
+            print("Dumping output")
 
             with open(f'output/{names[i]}.csv', 'w') as f:
                 combo.to_csv(f, index=False, header=True)
 
 
             i += 1
+
     except Exception as e:
-        # print(f"Error: {title}: {e}")
-        print(table.columns)
+        print(f"Error: {title}: {e}")
+        # print(table.columns)
         
 
+driver.close()

@@ -59,6 +59,22 @@ hospo['In hospital'] = hospo['Not in ICU'] + hospo['ICU']
 
 hospo = hospo[['Date', 'Jurisdiction', 'In hospital', 'ICU']]
 
+
+# ### GET DATA TO ADJUST NT HOSPITAL SCRAPE
+
+# nt_hos = pd.read_csv('output/nt_hospitalisations')
+# # 'Date', 'In hospital'
+# nt_hos['Jurisdiction'] = "NT"
+
+# hospo.loc[(hospo['Jurisdiction'] == "NT") & (hospo['Date'] > "2021-12-19"), "In hospital"] = nt_hos['In hospital']
+
+# p = nt_hos
+# print(p)
+# # print(p.tail(20))
+# print(p.columns.tolist())
+
+# print(hospo.loc[hospo['Jurisdiction'] == "NT"].tail(30))
+
 ### Start Combining
 
 
@@ -119,8 +135,6 @@ combo['LAST_UPDATED_DATE'] = combo['REPORT_DATE']
 # testo = testo[['REPORT_DATE', 'CODE', 'CASE_CNT','PREV_CASE_CNT', 'NEW_CASE_CNT']]
 
 
-
-
 ### Read in prev Anthony data
 
 ant = pd.read_csv('archive/Anthony_feed.csv')
@@ -142,6 +156,9 @@ tog['LAST_UPDATED_DATE'] = tog['LAST_UPDATED_DATE'].dt.strftime("%Y-%m-%d")
 
 tog = tog.sort_values(by='REPORT_DATE', ascending=True)
 
+
+
+
 ### Keep copy
 
 with open('archive/cases_feed_archive.csv', 'w') as f:
@@ -150,17 +167,17 @@ with open('archive/cases_feed_archive.csv', 'w') as f:
 
 testo = tog.loc[(tog['REPORT_DATE'] > "2021-10-01") & (tog['REPORT_DATE'] < "2021-10-15")]
 
-testo = testo.loc[testo['CODE'] == "NSW"]
+# testo = testo.loc[testo['CODE'] == "NSW"]
 
-p = testo
+p = tog
 
 
-print(p)
-# print(p.tail(20))
-print(p.columns.tolist())
+# print(p)
+# # print(p.tail(20))
+# print(p.columns.tolist())
 
 tog.fillna('', inplace=True)
 
 # print(combo.to_dict('records'))
 
-syncData(tog.to_dict(orient='records'),'2022/01/oz-covid-health-data', f"cases")
+# syncData(tog.to_dict(orient='records'),'2022/01/oz-covid-health-data', f"cases")
