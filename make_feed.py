@@ -1,6 +1,9 @@
 import pandas as pd 
 from modules.syncData import syncData
 pd.set_option("display.max_rows", 100)
+
+print("Making cases feed")
+
 # test = pd.read_json('https://covidlive.com.au/covid-live.json')
 # print(test.columns.tolist())
 
@@ -71,11 +74,11 @@ nt_hos['Jurisdiction'] = "NT"
 hospo = hospo.append(nt_hos)
 
 p = hospo
-print(p)
+# print(p)
 # print(p.tail(20))
 # print(p.columns.tolist())
 
-print(hospo.loc[hospo['Jurisdiction'] == "NT"].tail(35))
+# print(hospo.loc[hospo['Jurisdiction'] == "NT"].tail(35))
 
 ### Start Combining
 

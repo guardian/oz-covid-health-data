@@ -7,6 +7,8 @@ import datetime
 import pytz
 import time
 
+print("Scraping Health Dept")
+
 utc_now = pytz.utc.localize(datetime.datetime.utcnow())
 today = utc_now.astimezone(pytz.timezone("Australia/Brisbane"))
 today = today.strftime('%Y-%m-%d')
@@ -34,7 +36,7 @@ i = 0
 ## Need to wait while all the tables load
 while len(tables) < 9:
     # driver.implicitly_wait(10)
-    print(f"Len {len(tables)}")
+    # print(f"Len {len(tables)}")
     time.sleep(2)
     tables = pd.read_html(driver.page_source.encode("utf-8"))
     i += 1
@@ -94,14 +96,14 @@ if len(tables) >= 9:
 
             if (nammo == "recent_cases") | (nammo == "total_cases"):
                 # if (name == testo):
-                    print(nammo, cols)
+                    # print(nammo, cols)
                     inter_cols = table.columns.tolist()
                     inter_cols = [x.replace("*", "").strip() if "*" in x else x for x in inter_cols]
                     inter_cols = [x.replace("^", "").strip() if "^" in x else x for x in inter_cols]
                     inter_cols = [x.replace("'", "").strip() if "'" in x else x for x in inter_cols]
                     inter_cols = [x.replace("'", "").strip() if "'" in x else x for x in inter_cols]
                     table.columns = inter_cols
-                    print(nammo, inter_cols)
+                    # print(nammo, inter_cols)
                     # table.rename(columns={"'Under investigation last 24 hours'":'Under investigation last 24 hours'}, inplace=True)
 
             table[cols] = table[cols]

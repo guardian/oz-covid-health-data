@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup as bs
 
 import datefinder
 
+print("Running NT Health Scraper")
+
 r = requests.get('https://coronavirus.nt.gov.au/current-status#covid-19-data')
 
 soup = bs(r.text, 'html.parser')
@@ -79,5 +81,5 @@ with open('output/nt_hospitalisations.csv', 'w') as f:
 
 p = tog
 
-print(p)
-print(p.columns)
+# print(p)
+# print(p.columns)
