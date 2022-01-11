@@ -73,9 +73,41 @@ nt_hos['Jurisdiction'] = "NT"
 
 hospo = hospo.append(nt_hos)
 
+### NEED TO ADJUST THE NATIONAL HOSPITALISATION FIGURES
+
+hospo['In hospital'] = pd.to_numeric(hospo['In hospital'])
+
+med = hospo[['Date', 'Jurisdiction', 'In hospital']]
+
+## Have to remove hospital column to readd later
+hospo = hospo[['Date', 'Jurisdiction','ICU']]
+
+### Create one df from before the change
+bef = med.loc[med['Date'] < "2021-12-20"]
+
+## One df from after
+aff = med.loc[med['Date'] > "2021-12-19"]
+
+## Exclude nation figures
+oz_aff = aff.loc[aff['Jurisdiction'] != "Australia"]
+
+## Groupby states and sum to get new national
+grp = oz_aff.groupby(by=['Date'])['In hospital'].sum().reset_index()
+grp['Jurisdiction'] = "Australia"
+
+### Add everything back together
+grp = oz_aff.append(grp)
+
+tog = bef.append(grp)
+tog = tog.sort_values(by=['Date'], ascending=True)
+
+
+hospo = pd.merge(hospo, tog, on=['Date', 'Jurisdiction'], how='left')
+
+
 p = hospo
-# print(p)
-# print(p.tail(20))
+print(p)
+print(p.tail(20))
 # print(p.columns.tolist())
 
 # print(hospo.loc[hospo['Jurisdiction'] == "NT"].tail(35))
@@ -172,7 +204,7 @@ with open('archive/cases_feed_archive.csv', 'w') as f:
 
 testo = tog.loc[(tog['REPORT_DATE'] > "2021-10-01") & (tog['REPORT_DATE'] < "2021-10-15")]
 
-# testo = testo.loc[testo['CODE'] == "NSW"]
+testo = testo.loc[testo['CODE'] == "AUS"]
 
 p = tog
 
