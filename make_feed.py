@@ -134,6 +134,8 @@ second_latest_cases = oz.iloc[-2]['CASE_CNT']
 # if latest_cases == second_latest_cases:
 #     inter2 = inter2.iloc[:-1].copy()
 
+combo = combo.drop_duplicates(subset=['REPORT_DATE', 'CODE'], keep='last')
+
 listo = []
 
 for juri in combo['CODE'].unique().tolist():
@@ -202,16 +204,16 @@ with open('archive/cases_feed_archive.csv', 'w') as f:
     tog.to_csv(f, header=True, index=False)
 
 
-testo = tog.loc[(tog['REPORT_DATE'] > "2021-10-01") & (tog['REPORT_DATE'] < "2021-10-15")]
-
+# testo = tog.loc[(tog['REPORT_DATE'] > "2021-10-01") & (tog['REPORT_DATE'] < "2021-10-15")]
+testo = tog.copy()
 testo = testo.loc[testo['CODE'] == "AUS"]
 
-p = tog
+p = testo
 
 
 # print(p)
-# # print(p.tail(20))
-# print(p.columns.tolist())
+print(p.tail(20))
+print(p.columns.tolist())
 
 tog.fillna('', inplace=True)
 
