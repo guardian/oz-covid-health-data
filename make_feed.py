@@ -92,6 +92,7 @@ aff = med.loc[med['Date'] > "2021-12-19"]
 oz_aff = aff.loc[aff['Jurisdiction'] != "Australia"]
 
 ## Groupby states and sum to get new national
+oz_aff = oz_aff.drop_duplicates(subset=['Date', 'Jurisdiction'])
 grp = oz_aff.groupby(by=['Date'])['In hospital'].sum().reset_index()
 grp['Jurisdiction'] = "Australia"
 
@@ -106,7 +107,7 @@ hospo = pd.merge(hospo, tog, on=['Date', 'Jurisdiction'], how='left')
 
 
 p = hospo
-print(p)
+print(p.loc[p['Jurisdiction'] == "Australia"])
 print(p.tail(20))
 # print(p.columns.tolist())
 
@@ -211,7 +212,7 @@ testo = testo.loc[testo['CODE'] == "AUS"]
 p = testo
 
 
-# print(p)
+# print(p.loc[p['Jurisdiction'] == "Australia"])
 print(p.tail(20))
 print(p.columns.tolist())
 
