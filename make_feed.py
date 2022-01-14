@@ -236,4 +236,4 @@ tog.fillna('', inplace=True)
 
 # print(combo.to_dict('records'))
 
-syncData(tog.to_dict(orient='records'),'2022/01/oz-covid-health-data', f"cases{testo}")
+syncData(tog.to_dict(orient='records'),'2022/01/oz-covid-health-data', f"cases")
