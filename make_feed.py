@@ -3,6 +3,8 @@ from modules.syncData import syncData
 pd.set_option("display.max_rows", 100)
 
 print("Making cases feed")
+testo = ''
+testo = '-testo'
 
 # test = pd.read_json('https://covidlive.com.au/covid-live.json')
 # print(test.columns.tolist())
@@ -61,49 +63,63 @@ hospo['In hospital'] = hospo['Not in ICU'] + hospo['ICU']
 
 
 hospo = hospo[['Date', 'Jurisdiction', 'In hospital', 'ICU']]
+hospo = hospo.loc[~((hospo['Date'] >= '2021-12-20') & (hospo['Date'] <= '2022-01-12'))]
 
-hospo = hospo.loc[~((hospo['Jurisdiction'] == "NT") & (hospo['Date'] > "2021-12-19"))]
 
 ### GET DATA TO ADJUST NT HOSPITAL SCRAPE
 
-nt_hos = pd.read_csv('output/nt_hospitalisations.csv')
-# 'Date', 'In hospital'
-# nt_hos.columsn = 
-nt_hos['Jurisdiction'] = "NT"
+nt_fixed = pd.read_csv('output/nt_hospitalisations_fixed.csv')
+nt_fixed = nt_fixed[['Date', 'Not in ICU', 'ICU', 'Jurisdiction']]
+nt_fixed.columns = ['Date', 'In hospital', 'ICU', 'Jurisdiction']
 
-hospo = hospo.append(nt_hos)
+hospo_fixed = hospo.append(nt_fixed)
+hospo_fixed.drop_duplicates(subset=['Date', 'Jurisdiction'], inplace=True)
+hospo_fixed.sort_values(by=['Date'], ascending=True, inplace=True)
 
-### NEED TO ADJUST THE NATIONAL HOSPITALISATION FIGURES
+hospo = hospo_fixed
 
-hospo['In hospital'] = pd.to_numeric(hospo['In hospital'])
+### THIS IS THE PREVIOUS CODE FROM THE ONGOING FIX
 
-med = hospo[['Date', 'Jurisdiction', 'In hospital']]
+# hospo = hospo.loc[~((hospo['Jurisdiction'] == "NT") & (hospo['Date'] > "2021-12-19"))]
 
-## Have to remove hospital column to readd later
-hospo = hospo[['Date', 'Jurisdiction','ICU']]
+# nt_hos = pd.read_csv('output/nt_hospitalisations.csv')
+# # 'Date', 'In hospital'
+# # nt_hos.columsn = 
+# nt_hos['Jurisdiction'] = "NT"
 
-### Create one df from before the change
-bef = med.loc[med['Date'] < "2021-12-20"]
+# hospo = hospo.append(nt_hos)
 
-## One df from after
-aff = med.loc[med['Date'] > "2021-12-19"]
+# ### NEED TO ADJUST THE NATIONAL HOSPITALISATION FIGURES
 
-## Exclude nation figures
-oz_aff = aff.loc[aff['Jurisdiction'] != "Australia"]
+# hospo['In hospital'] = pd.to_numeric(hospo['In hospital'])
 
-## Groupby states and sum to get new national
-oz_aff = oz_aff.drop_duplicates(subset=['Date', 'Jurisdiction'])
-grp = oz_aff.groupby(by=['Date'])['In hospital'].sum().reset_index()
-grp['Jurisdiction'] = "Australia"
+# med = hospo[['Date', 'Jurisdiction', 'In hospital']]
 
-### Add everything back together
-grp = oz_aff.append(grp)
+# ## Have to remove hospital column to readd later
+# hospo = hospo[['Date', 'Jurisdiction','ICU']]
 
-tog = bef.append(grp)
-tog = tog.sort_values(by=['Date'], ascending=True)
+# ### Create one df from before the change
+# bef = med.loc[med['Date'] < "2021-12-20"]
+
+# ## One df from after
+# aff = med.loc[med['Date'] > "2021-12-19"]
+
+# ## Exclude nation figures
+# oz_aff = aff.loc[aff['Jurisdiction'] != "Australia"]
+
+# ## Groupby states and sum to get new national
+# oz_aff = oz_aff.drop_duplicates(subset=['Date', 'Jurisdiction'])
+# grp = oz_aff.groupby(by=['Date'])['In hospital'].sum().reset_index()
+# grp['Jurisdiction'] = "Australia"
+
+# ### Add everything back together
+# grp = oz_aff.append(grp)
+
+# tog = bef.append(grp)
+# tog = tog.sort_values(by=['Date'], ascending=True)
 
 
-hospo = pd.merge(hospo, tog, on=['Date', 'Jurisdiction'], how='left')
+# hospo = pd.merge(hospo, tog, on=['Date', 'Jurisdiction'], how='left')
 
 
 p = hospo
@@ -207,17 +223,17 @@ with open('archive/cases_feed_archive.csv', 'w') as f:
 
 # testo = tog.loc[(tog['REPORT_DATE'] > "2021-10-01") & (tog['REPORT_DATE'] < "2021-10-15")]
 testo = tog.copy()
-testo = testo.loc[testo['CODE'] == "AUS"]
+testo = testo.loc[testo['CODE'] == "NT"]
 
 p = testo
 
 
 # print(p.loc[p['Jurisdiction'] == "Australia"])
-print(p.tail(20))
+print(p[['REPORT_DATE', 'CODE', 'ACTIVE_CNT', 'CASE_CNT', 'DEATH_CNT', 'TEST_CNT', 'MED_HOSP_CNT', 'MED_ICU_CNT', 'NAME',  'NEW_CASE_CNT']].tail(20))
 print(p.columns.tolist())
 
 tog.fillna('', inplace=True)
 
 # print(combo.to_dict('records'))
 
-syncData(tog.to_dict(orient='records'),'2022/01/oz-covid-health-data', f"cases")
+syncData(tog.to_dict(orient='records'),'2022/01/oz-covid-health-data', f"cases{testo}")

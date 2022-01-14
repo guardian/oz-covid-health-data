@@ -83,3 +83,29 @@ p = tog
 
 # print(p)
 # print(p.columns)
+
+### Dump a final archive of the fixed portion
+
+
+ddf = hospo.copy()
+# Jurisdiction,Not in ICU,ICU,Date
+
+ddf = ddf.loc[(ddf['Date'] >= '2021-12-20') & (ddf['Date'] <= '2022-01-12')]
+
+tog = tog.loc[(tog['Date'] >= '2021-12-20') & (tog['Date'] <= '2022-01-12')]
+tog['Jurisdiction'] = "NT"
+tog = tog[['Date', 'In hospital', 'ICU', 'Jurisdiction']]
+tog.columns = ['Date', 'Not in ICU', 'ICU', 'Jurisdiction']
+
+print(tog)
+print(tog.columns)
+
+fdf = ddf.append(tog)
+fdf = fdf.drop_duplicates(subset=['Date', 'Jurisdiction'], keep='last')
+
+print(fdf)
+
+print(fdf.columns)
+
+with open('output/nt_hospitalisations_fixed.csv', 'w') as f:
+    fdf.to_csv(f, index=False, header=True)
