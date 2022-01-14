@@ -4,7 +4,7 @@ pd.set_option("display.max_rows", 100)
 
 print("Making cases feed")
 testo = ''
-testo = '-testo'
+# testo = '-testo'
 
 # test = pd.read_json('https://covidlive.com.au/covid-live.json')
 # print(test.columns.tolist())
@@ -223,7 +223,7 @@ with open('archive/cases_feed_archive.csv', 'w') as f:
 
 # testo = tog.loc[(tog['REPORT_DATE'] > "2021-10-01") & (tog['REPORT_DATE'] < "2021-10-15")]
 testo = tog.copy()
-testo = testo.loc[testo['CODE'] == "NT"]
+testo = testo.loc[testo['CODE'] == "AUS"]
 
 p = testo
 
