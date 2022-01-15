@@ -97,15 +97,47 @@ tog['Jurisdiction'] = "NT"
 tog = tog[['Date', 'In hospital', 'ICU', 'Jurisdiction']]
 tog.columns = ['Date', 'Not in ICU', 'ICU', 'Jurisdiction']
 
-print(tog)
-print(tog.columns)
+# print(tog)
+# print(tog.columns)
 
 fdf = ddf.append(tog)
 fdf = fdf.drop_duplicates(subset=['Date', 'Jurisdiction'], keep='last')
 
-print(fdf)
+# print("Len", len(fdf))
 
-print(fdf.columns)
+# print(fdf)
+# print(fdf.columns)
+
+### NEED TO ADJUST THE NATIONAL HOSPITALISATION FIGURES
+
+# fdf.columns = ['Jurisdiction', 'Not in ICU', 'ICU', 'Date']
+fdf['Not in ICU'] = pd.to_numeric(fdf['Not in ICU'])
+fdf['ICU'] = pd.to_numeric(fdf['ICU'])
+
+## Exclude nation figures
+no_oz = fdf.loc[fdf['Jurisdiction'] != "Australia"]
+
+## Groupby states and sum to get new national
+no_oz  = no_oz.drop_duplicates(subset=['Date', 'Jurisdiction'])
+
+grp = no_oz.groupby(by=['Date'])[['Not in ICU', 'ICU']].sum().reset_index()
+grp['Jurisdiction'] = "Australia"
+
+# print("GROUPED", grp)
+
+# print(len(grp))
+
+fin = no_oz.append(grp)
+
+fin.drop_duplicates(subset=['Date', 'Jurisdiction'],keep='last', inplace=True)
+
+fin.sort_values(by=['Date'],ascending=True, inplace=True)
+print(fin.tail(30))
+
+
+# print(fdf)
+
+# print(fdf.columns)
 
 with open('output/nt_hospitalisations_fixed.csv', 'w') as f:
-    fdf.to_csv(f, index=False, header=True)
+    fin.to_csv(f, index=False, header=True)
