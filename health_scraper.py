@@ -118,8 +118,17 @@ if len(tables) >= 9:
             combo = combo.drop_duplicates(keep='last')
             # print("Dropped", combo.shape)
 
+            dropper = ['recent_cases', 'total_cases', 'tests', 'hospitalisations', 'aged_care_resi', 'aged_care_home']
+
+            if names[i] in dropper:
+                print(names[i])
+                print(len(combo))
+                combo = combo.drop_duplicates(subset=['Jurisdiction', 'Date'], keep='last')
+                print(len(combo))
 
             print("Dumping output")
+
+
 
             with open(f'output/{names[i]}.csv', 'w') as f:
                 combo.to_csv(f, index=False, header=True)
