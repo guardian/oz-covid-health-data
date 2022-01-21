@@ -78,6 +78,27 @@ hospo_fixed.sort_values(by=['Date'], ascending=True, inplace=True)
 
 hospo = hospo_fixed
 
+
+### GET DATA TO ADJUST NSW HOSPITAL SCRAPE
+
+nsw_fixed = pd.read_csv('fixes/hospo_15_18_jan.csv')
+nsw_fixed = nsw_fixed[['Date', 'Not in ICU', 'ICU', 'Jurisdiction']]
+nsw_fixed['Not in ICU'] = nsw_fixed['Not in ICU'] + nsw_fixed['ICU'] 
+nsw_fixed.columns = ['Date', 'In hospital', 'ICU', 'Jurisdiction']
+
+hospo = hospo.loc[~((hospo['Date'] > "2022-01-14") & (hospo['Date'] < "2022-01-19"))]
+
+hospo_fixed_two = hospo.append(nsw_fixed)
+hospo_fixed_two.drop_duplicates(subset=['Date', 'Jurisdiction'], inplace=True, keep='last')
+hospo_fixed_two.sort_values(by=['Date'], ascending=True, inplace=True)
+
+hospo = hospo_fixed_two
+
+print(hospo)
+print(hospo.loc[(hospo['Date'] > "2022-01-14") & (hospo['Date'] < "2022-01-21")])
+print(hospo['Date'].unique().tolist())
+
+
 ### THIS IS THE PREVIOUS CODE FROM THE ONGOING FIX
 
 # hospo = hospo.loc[~((hospo['Jurisdiction'] == "NT") & (hospo['Date'] > "2021-12-19"))]

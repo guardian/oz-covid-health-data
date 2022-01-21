@@ -2,9 +2,12 @@ import pandas as pd
 import os 
 
 
+# names = ["recent_cases", "total_cases", "cases_age_sex",
+#  "deaths_age_sex", "tests", "hospitalisations", "ndis",
+#   "aged_care_resi", "aged_care_home"]
+
 names = ["recent_cases", "total_cases", "cases_age_sex",
- "deaths_age_sex", "tests", "hospitalisations", "ndis",
-  "aged_care_resi", "aged_care_home"]
+ "deaths_age_sex", "tests", "hospitalisations", "aged_care_resi",'aged_care_home' ]
 
 testo = names[0]
 dicto = {"recent_cases": ['Jurisdiction', 'Active cases', 'Locally acquired last 24 hours',
@@ -22,16 +25,24 @@ dicto = {"recent_cases": ['Jurisdiction', 'Active cases', 'Locally acquired last
                         'Tests in last 7 days per 100,000 population', 'Total tests',
                         'Total positive tests (%)', 'Date'],
         "hospitalisations": ['Jurisdiction', 'Not in ICU', 'ICU', 'Date'],
+    #     "ndis"  :['State', 'Participant Active', 'Worker Active', 'Participant Recovered',
+    #    'Worker Recovered', 'Participant Deaths', 'Worker Deaths', 'Date'],
         "ndis"  :['State', 'Participant Active', 'Worker Active', 'Participant Recovered',
-       'Worker Recovered', 'Participant Deaths', 'Worker Deaths', 'Date'],
-"aged_care_resi" :['Jurisdiction', 'Active', 'Recovered', 'Deaths', 'Date'],
-'aged_care_home': ['Jurisdiction', 'Active', 'Recovered', 'Deaths', 'Date']}
+       'Worker Recovered', 'Participant Deaths', 'Date'],
+# "aged_care_resi" :['Jurisdiction', 'Active', 'Recovered', 'Deaths', 'Date'],
+# 'aged_care_home': ['Jurisdiction', 'Active', 'Recovered', 'Deaths', 'Date']
+"aged_care_resi" :['Jurisdiction', 'Active and Recovered', 'Deaths', 'Date'],
+'aged_care_home': ['Jurisdiction', 'Active and Recovered', 'Deaths', 'Date']
+}
 
 for name in names:
 
+    print(name)
     listo = []
     for file in os.listdir('data'):
         if name in file:
+
+
 
             cols = dicto[name]
 
@@ -49,8 +60,18 @@ for name in names:
 
                 inter.columns = cols
             
-            inter[cols] = inter[cols]
-
+            if (name == "aged_care_resi") | (name == "aged_care_home"):
+                print(file)
+                if ("Recovered" in inter.columns.tolist()) & ("Active" in inter.columns.tolist()):
+                    inter['Active and Recovered'] = inter['Active'] + inter['Recovered']
+                print(inter.columns.tolist())
+                
+            try:
+                inter[cols] = inter[cols]
+            except Exception:
+                print(file)
+                print(inter.columns)
+                break
             listo.append(inter)
 
 

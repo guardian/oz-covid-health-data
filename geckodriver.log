@@ -685,3 +685,20 @@ console.error: BackgroundUpdate:
 
 ###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
 
+1642729521834	geckodriver	INFO	Listening on 127.0.0.1:61283
+1642729522840	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "--marionette" "--headless" "-foreground" "-no-remote" "-profile" "/var/folders/zj/64pcvrn117b35wx61ttyc22dy4rksl/T/rust_mozprofile46diTi"
+*** You are running in headless mode.
+console.error: Policies.jsm: 
+  Unable to find certificate - gnm_root_ca.cer
+1642729523188	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /var/folders/zj/64pcvrn117b35wx61ttyc22dy4rksl/T/rust_mozprofile46diTi/search.json.mozlz4", (void 0)))
+console.error: BackgroundUpdate: 
+  _reasonsToNotScheduleUpdates: Failed to check for Maintenance Service Registry Key: [Exception... "Component returned failure code: 0x80004001 (NS_ERROR_NOT_IMPLEMENTED) [nsIUpdateProcessor.getServiceRegKeyExists]"  nsresult: "0x80004001 (NS_ERROR_NOT_IMPLEMENTED)"  location: "JS frame :: resource://gre/modules/BackgroundUpdate.jsm :: _reasonsToNotScheduleUpdates :: line 243"  data: no]
+1642729524291	Marionette	INFO	Listening on port 61294
+1642729524325	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.health.gov.au"
+1642729543401	Marionette	INFO	Stopped listening on port 61294
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+

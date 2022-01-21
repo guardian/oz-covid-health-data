@@ -65,9 +65,9 @@ dicto = {"recent_cases": ['Jurisdiction', 'Active cases', 'Locally acquired last
                         'Total positive tests (%)', 'Date'],
         "hospitalisations": ['Jurisdiction', 'Not in ICU', 'ICU', 'Date'],
         "ndis"  :['State', 'Participant Active', 'Worker Active', 'Participant Recovered',
-       'Worker Recovered', 'Participant Deaths', 'Worker Deaths', 'Date'],
-"aged_care_resi" :['Jurisdiction', 'Active', 'Recovered', 'Deaths', 'Date'],
-'aged_care_home': ['Jurisdiction', 'Active', 'Recovered', 'Deaths', 'Date']}
+       'Worker Recovered', 'Participant Deaths', 'Date'],
+"aged_care_resi" :['Jurisdiction', 'Active and Recovered', 'Deaths', 'Date'],
+'aged_care_home': ['Jurisdiction', 'Active and Recovered', 'Deaths', 'Date']}
 
 if len(tables) >= 9:
     try:
