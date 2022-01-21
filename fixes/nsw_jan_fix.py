@@ -39,7 +39,7 @@ combo = df.append(national)
 combo.drop_duplicates(subset=['Date', 'Jurisdiction'], keep='last', inplace=True)
 combo.sort_values(by=['Date'], inplace=True, ascending=True)
 
-rename = {"New South Wales":"NSW", "Australia": "AUS", "Queensland":"QLD", "Northern Territory": "NT",
+rename = {"New South Wales":"NSW", "Australia": "Australia", "Queensland":"QLD", "Northern Territory": "NT",
 "Australian Capital Territory":"ACT", "South Australia": "SA", "Tasmania":"TAS", "Victoria": "VIC", "Western Australia": "WA"}
 
 for state in combo['Jurisdiction'].unique().tolist():
