@@ -95,6 +95,7 @@ hospo_fixed_two.sort_values(by=['Date'], ascending=True, inplace=True)
 hospo = hospo_fixed_two
 
 print(hospo)
+print(hospo.loc[hospo['Jurisdiction'] == "NSW"])
 print(hospo.loc[(hospo['Date'] > "2022-01-14") & (hospo['Date'] < "2022-01-21")])
 print(hospo['Date'].unique().tolist())
 
@@ -244,7 +245,7 @@ with open('archive/cases_feed_archive.csv', 'w') as f:
 
 # testo = tog.loc[(tog['REPORT_DATE'] > "2021-10-01") & (tog['REPORT_DATE'] < "2021-10-15")]
 testo = tog.copy()
-testo = testo.loc[testo['CODE'] == "AUS"]
+testo = testo.loc[testo['CODE'] == "NSW"]
 
 p = testo
 
@@ -252,7 +253,7 @@ p = testo
 # print(p.loc[p['Jurisdiction'] == "Australia"])
 print(p[['REPORT_DATE', 'CODE', 'ACTIVE_CNT', 'CASE_CNT', 'DEATH_CNT', 'TEST_CNT', 'MED_HOSP_CNT', 'MED_ICU_CNT', 'NAME',  'NEW_CASE_CNT']].tail(20))
 print(p.columns.tolist())
-
+print(tog['CODE'].unique().tolist())
 tog.fillna('', inplace=True)
 
 # print(combo.to_dict('records'))

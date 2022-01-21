@@ -39,11 +39,19 @@ combo = df.append(national)
 combo.drop_duplicates(subset=['Date', 'Jurisdiction'], keep='last', inplace=True)
 combo.sort_values(by=['Date'], inplace=True, ascending=True)
 
+rename = {"New South Wales":"NSW", "Australia": "AUS", "Queensland":"QLD", "Northern Territory": "NT",
+"Australian Capital Territory":"ACT", "South Australia": "SA", "Tasmania":"TAS", "Victoria": "VIC", "Western Australia": "WA"}
+
+for state in combo['Jurisdiction'].unique().tolist():
+    combo.loc[combo['Jurisdiction'] == state, 'Jurisdiction'] = rename[state]
+
 p = combo
 
 with open('fixes/hospo_15_18_jan.csv', 'w') as f:
     combo.to_csv(f, index=False, header=True)
 
+
+ 
 # vchecker = 'gdp_per_capita'
 # print(p.loc[p[vchecker].isna()])
 print(p)
