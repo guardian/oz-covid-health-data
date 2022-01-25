@@ -1,5 +1,4 @@
 import pandas as pd 
-from modules.syncData import syncData
 pd.set_option("display.max_rows", 100)
 
 print("Making cases feed")
@@ -232,10 +231,15 @@ tog['REPORT_DATE'] = tog['REPORT_DATE'].dt.strftime("%Y-%m-%d")
 tog['LAST_UPDATED_DATE'] = pd.to_datetime(tog['LAST_UPDATED_DATE'])
 tog['LAST_UPDATED_DATE'] = tog['LAST_UPDATED_DATE'].dt.strftime("%Y-%m-%d")
 
+### Crow bar in the fix for the lack of updates from the 16th to 18th Jan
+
+tog = tog.loc[~((tog['REPORT_DATE'] >= "2022-01-15") & (tog['REPORT_DATE'] <= "2022-01-18"))]
+
+new_fix = pd.read_csv('fixes/covid_live_jan_15_18.csv')
+
+tog = tog.append(new_fix)
+
 tog = tog.sort_values(by='REPORT_DATE', ascending=True)
-
-
-
 
 ### Keep copy
 
@@ -245,7 +249,7 @@ with open('archive/cases_feed_archive.csv', 'w') as f:
 
 # testo = tog.loc[(tog['REPORT_DATE'] > "2021-10-01") & (tog['REPORT_DATE'] < "2021-10-15")]
 testo = tog.copy()
-testo = testo.loc[testo['CODE'] == "NSW"]
+testo = testo.loc[testo['CODE'] == "AUS"]
 
 p = testo
 
@@ -253,9 +257,10 @@ p = testo
 # print(p.loc[p['Jurisdiction'] == "Australia"])
 print(p[['REPORT_DATE', 'CODE', 'ACTIVE_CNT', 'CASE_CNT', 'DEATH_CNT', 'TEST_CNT', 'MED_HOSP_CNT', 'MED_ICU_CNT', 'NAME',  'NEW_CASE_CNT']].tail(20))
 print(p.columns.tolist())
-print(tog['CODE'].unique().tolist())
+# print(tog['CODE'].unique().tolist())
 tog.fillna('', inplace=True)
 
 # print(combo.to_dict('records'))
 
+from modules.syncData import syncData
 syncData(tog.to_dict(orient='records'),'2022/01/oz-covid-health-data', f"cases")
