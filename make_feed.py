@@ -233,13 +233,16 @@ tog['LAST_UPDATED_DATE'] = tog['LAST_UPDATED_DATE'].dt.strftime("%Y-%m-%d")
 
 ### Crow bar in the fix for the lack of updates from the 16th to 18th Jan
 
-tog = tog.loc[~((tog['REPORT_DATE'] >= "2022-01-15") & (tog['REPORT_DATE'] <= "2022-01-18"))]
+tog = tog.loc[~((tog['REPORT_DATE'] >= "2022-01-16") & (tog['REPORT_DATE'] <= "2022-01-18"))]
 
 new_fix = pd.read_csv('fixes/covid_live_jan_15_18.csv')
 
 tog = tog.append(new_fix)
+tog.drop_duplicates(subset=['REPORT_DATE', 'CODE'], inplace=True)
 
 tog = tog.sort_values(by='REPORT_DATE', ascending=True)
+
+
 
 ### Keep copy
 
@@ -249,7 +252,7 @@ with open('archive/cases_feed_archive.csv', 'w') as f:
 
 # testo = tog.loc[(tog['REPORT_DATE'] > "2021-10-01") & (tog['REPORT_DATE'] < "2021-10-15")]
 testo = tog.copy()
-testo = testo.loc[testo['CODE'] == "AUS"]
+testo = testo.loc[testo['CODE'] == "NSW"]
 
 p = testo
 
