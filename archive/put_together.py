@@ -21,9 +21,11 @@ dicto = {"recent_cases": ['Jurisdiction', 'Active cases', 'Locally acquired last
                         'Total cases', 'Total deaths', 'Date'],
         "cases_age_sex":    ['Age Group', 'Male', 'Female', 'Date'],
         "deaths_age_sex":   ['Age Group', 'Male', 'Female', 'Date'],
+        # "tests":    ['Jurisdiction', 'Tests in last 7 days',
+        #                 'Tests in last 7 days per 100,000 population', 'Total tests',
+        #                 'Total positive tests (%)', 'Date'],
         "tests":    ['Jurisdiction', 'Tests in last 7 days',
-                        'Tests in last 7 days per 100,000 population', 'Total tests',
-                        'Total positive tests (%)', 'Date'],
+                        'Tests in last 7 days per 100,000 population', 'Total tests', 'Date'],
         "hospitalisations": ['Jurisdiction', 'Not in ICU', 'ICU', 'Date'],
     #     "ndis"  :['State', 'Participant Active', 'Worker Active', 'Participant Recovered',
     #    'Worker Recovered', 'Participant Deaths', 'Worker Deaths', 'Date'],
@@ -47,6 +49,7 @@ for name in names:
             cols = dicto[name]
 
             inter = pd.read_csv(f'data/{file}', parse_dates=['Date'])
+            # inter = inter[cols]
 
             if (name == "recent_cases") | (name == "total_cases"):
             # if (name == testo):
@@ -61,10 +64,10 @@ for name in names:
                 inter.columns = cols
             
             if (name == "aged_care_resi") | (name == "aged_care_home"):
-                print(file)
+                # print(file)
                 if ("Recovered" in inter.columns.tolist()) & ("Active" in inter.columns.tolist()):
                     inter['Active and Recovered'] = inter['Active'] + inter['Recovered']
-                print(inter.columns.tolist())
+                # print(inter.columns.tolist())
                 
             try:
                 inter[cols] = inter[cols]

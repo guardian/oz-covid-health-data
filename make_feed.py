@@ -166,7 +166,12 @@ combo['NAME'] = combo.apply(lambda row: codes[row.CODE], axis = 1)
 
 oz = combo.loc[combo['CODE'] == "AUS"].copy()
 latest_cases = oz.iloc[-1]['CASE_CNT']
+
+print("latest_cases", latest_cases)
+
 second_latest_cases = oz.iloc[-2]['CASE_CNT']
+
+print("second_latest", second_latest_cases)
 
 # second_latest_cases = inter2.iloc[-2]['Total cases']
 # if latest_cases == second_latest_cases:
